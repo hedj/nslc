@@ -1,10 +1,10 @@
 # nslc
-A serial link control protocol.
+A serial frame format.
 
-Borrowing heavily from [Arduhdlc](https://github.com/jarkko-hautakorpi/Arduhdlc), this is a protocol and handler implementation for
+Borrowing heavily from [Arduhdlc](https://github.com/jarkko-hautakorpi/Arduhdlc), this is a serial framing implementation for
 Arduino and Python.
 
-Like HDLC, the protocol is frame-based, but nslc is *not* in any way shape or form compatible with HDLC.
+nslc is *not* in any way shape or form compatible with HDLC.
 
 Frames consists of a series of data bytes followed by a checksum byte, followed by a LF (0x0A).
 
