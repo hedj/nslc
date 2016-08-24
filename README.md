@@ -8,9 +8,10 @@ nslc is *not* in any way shape or form compatible with HDLC.
 
 Frames consists of a series of data bytes followed by a checksum byte, followed by a LF (0x0A).
 
-Before transmission, control characters must be escaped: 
+Before transmission, control characters appearing in the data and checksum bytes must be escaped: 
   TAB characters appearing in the frame are replaced with the two-byte sequence  TAB+SPACE (0x09, 0x20), then
   LF characters appearing in the frame are replaced with the two-byte sequence TAB+LF (0x09, 0x0A).
+The final LF character is *not* escaped.
 
 On reception, TAB+LF sequences are replaced with LF, and TAB+SPACE sequences with TAB.
 
