@@ -51,10 +51,14 @@ void NSLC::charReceiver(uint8_t data)
 {
 
     if(data == FRAME_BOUNDARY_OCTET) {
+      for(int i=0; i< this->frame_position-1; i++) {
+        this->frame_checksum = T[this->frame_checksum ^ this->receive_frame_buffer[i]];
+      }
+
         if ((this->frame_position >=2) &&
             (this->frame_checksum == this->receive_frame_buffer[this->frame_position-1])) {
             // Valid frame found, call the handler
-            (*frame_handler)(receive_frame_buffer,(uint8_t)(this->frame_position-2));
+            (*frame_handler)(receive_frame_buffer,(uint8_t)(this->frame_position-1));
         }
         this->frame_position = 0;
         this->frame_checksum = 0;
@@ -62,7 +66,7 @@ void NSLC::charReceiver(uint8_t data)
         return;
     }
 
-   
+
     if(this->escape_character)
     {
         this->escape_character = false;
@@ -75,10 +79,6 @@ void NSLC::charReceiver(uint8_t data)
     }
 
     receive_frame_buffer[this->frame_position] = data;
-
-    if(this->frame_position >= 2) {
-        this->frame_checksum = this->T[this->frame_checksum ^ receive_frame_buffer[this->frame_position-2] ];
-    }
 
     this->frame_position++;
 
