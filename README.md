@@ -1,8 +1,8 @@
 # nslc
 A serial frame format.
 
-Borrowing heavily from [Arduhdlc](https://github.com/jarkko-hautakorpi/Arduhdlc), this is a serial framing implementation for
-Arduino.
+Borrowing heavily from [Arduhdlc](https://github.com/jarkko-hautakorpi/Arduhdlc), and sharing the same API,
+this is a serial framing implementation for Arduino.
 
 nslc is *not* in any way shape or form compatible with HDLC.
 
