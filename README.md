@@ -1,7 +1,7 @@
 # nslc
 A serial link control protocol.
 
-Inspired heavily by [Arduhdlc](https://github.com/jarkko-hautakorpi/Arduhdlc), this is a protocol and handler implementation for
+Borrowing heavily from [Arduhdlc](https://github.com/jarkko-hautakorpi/Arduhdlc), this is a protocol and handler implementation for
 Arduino and Python.
 
 Like HDLC, the protocol is frame-based, but nslc is *not* in any way shape or form compatible with HDLC.
