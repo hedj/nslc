@@ -8,8 +8,8 @@ Like HDLC, the protocol is frame-based, but nslc is *not* in any way shape or fo
 
 Frames consists of a series of data bytes followed by a checksum byte, followed by a LF (0x0A).
 
-TAB characters appearing in the frame are replaced with the two-byte sequence TAB+SPACE before transmission, then
-LF characters appearing in the frame are replaced with the two-byte sequence TAB+LF before transmission.
+TAB characters appearing in the frame are replaced with the two-byte sequence  TAB+SPACE (0x09, 0x20) before transmission, then
+LF characters appearing in the frame are replaced with the two-byte sequence TAB+LF (0x09, 0x0A)  before transmission.
 
 On reception, TAB+LF sequences are replaced with LF, and TAB+SPACE sequences with TAB.
 
@@ -35,7 +35,7 @@ The checksum used is an 8-bit [Pearson Hash](https://en.wikipedia.org/wiki/Pears
 ,242,87,60,18};
 ```
 
-With this choice of T, the strings "help\n" and "help\r\n" checksum correctly!
+With this choice of T, the strings "help\n" and "help\r\n" checksum correctly ( "p" is the checksum byte for "hel" and "\r" is the checksum byte for "help").
 If devices implement a handler for these sequences, then even someone with a misconfigured terminal
 will be able to type "help", press return and see help on how to use the device.
 
