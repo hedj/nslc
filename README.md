@@ -2,7 +2,7 @@
 A serial frame format.
 
 Borrowing heavily from [Arduhdlc](https://github.com/jarkko-hautakorpi/Arduhdlc), this is a serial framing implementation for
-Arduino and Python.
+Arduino.
 
 nslc is *not* in any way shape or form compatible with HDLC.
 
