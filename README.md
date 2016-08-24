@@ -8,6 +8,14 @@ Like HDLC, the protocol is frame-based, but nslc is *not* in any way shape or fo
 
 Frames consists of a series of data bytes followed by a checksum byte, followed by a LF (0x0A).
 
+TAB characters appearing in the frame are replaced with the two-byte sequence TAB+SPACE before transmission, then
+LF characters appearing in the frame are replaced with the two-byte sequence TAB+LF before transmission.
+
+On reception, TAB+LF sequences are replaced with LF, and TAB+SPACE sequences with TAB.
+
+This yields a checksummed protocol that does a reasonable job at preserving strings, producing only a possible garbage character
+at the end of each line.
+
 The checksum used is an 8-bit [Pearson Hash](https://en.wikipedia.org/wiki/Pearson_hashing) with the following table T:
 ```c++
 (uint_8) T[] = {13,161,243,130,182,147,68,235,82,83,221,191,112,38,135,184,143,206
