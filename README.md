@@ -38,9 +38,7 @@ The checksum used is an 8-bit [Pearson Hash](https://en.wikipedia.org/wiki/Pears
 
 With this choice of T, the strings 
 `"help\n"` and 
-`"help\r\n"` 
-
-checksum correctly ( "p" is the checksum byte for "hel" and "\r" is the checksum byte for "help").
+`"help\r\n"` checksum correctly ( "p" is the checksum byte for "hel" and "\r" is the checksum byte for "help").
 If devices implement a handler for these sequences, then even someone with a misconfigured terminal
 will be able to type "help", press return and see help on how to use the device.
 
