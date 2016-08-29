@@ -9,7 +9,9 @@ import zmq
 
 class NSLC:
 
-    candidate_frame = ''
+    candidate_frame = b''
+    frame_handlers = []
+    error_handlers = []
 
     T=np.array(
     [13,161,243,130,182,147,68,235,82,83,221,191,112,38,135,184,143,206
@@ -27,6 +29,26 @@ class NSLC:
     ,127,54,90,179,102,19,214,5,37,97,126,200,27,65,154,21,252,166
     ,71,22,151,77,9,251,117,188,56,197,8,139,210,249,239,246,254,255
     ,242,87,60,18])
+
+    def add_error_handler(self, f):
+      self.error_handlers += f
+
+    def add_frame_handler(self, f):
+      self.frame_handlers += f
+
+    def call_frame_handlers(self):
+      for f in self.frame_handlers:
+        try:
+          f(self.unwrap(self.candidate_frame))
+        except: 
+          print("Error in frame handler : %s "%sys.exc_info()[0])
+
+    def call_error_handlers(self):
+      for f in self.error_handlers:
+        try:
+          f(self.unwrap(self.candidate_frame))
+        except: 
+          print("Error in error handler : %s "%sys.exc_info()[0])
 
     def pearson_hash(self, input_bytes):
       h = 0
@@ -80,22 +102,34 @@ class NSLC:
       else:
         return bytestring
 
+    def consume(self, byestring):
+      for b in bytestring:
+        self.candidate_frame += bytes(b)
+        if len(self.candidate_frame) > 2:
+          if self.candidate_frame[-1] == 10 and self.candidate_frame[-2] != 9:
+            if self.is_valid_frame(self.candidate_frame):
+              self.call_frame_handlers()
+            else:
+              self.call_error_handlers()
+            self.candidate_frame = b''
+
+
 def go():
   s = serial.Serial('COM3', 250000)
+  
+  def errhandler(b):
+    print("Found invalid frame %s"%b)
+  def frame_handler(b):
+    print("Found valid frame %s"%b)
 
   lc = NSLC()
+  lc.add_frame_handler(frame_handler)
+  lc.add_error_handler(errhandler)
 
   inb = b''
   while(True):
     if(s.in_waiting > 0):
-      inb += s.read()
-    if( len(inb) >= 2):
-      if inb[-1] == 10 and inb[-2] != 9:
-        if(lc.is_valid_frame(inb)):
-          print("Found valid frame %s"%lc.unframe(inb))
-        else:
-          print("Found invalid frame %s"%lc.unframe(inb))
-        inb = b''
+      lc.consume(s.read())
 
 if __name__ == '__main__':
   go()
