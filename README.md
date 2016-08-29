@@ -1,11 +1,7 @@
 # nslc
-A serial frame format.
 
 Borrowing heavily from [Arduhdlc](https://github.com/jarkko-hautakorpi/Arduhdlc), and sharing the same API,
-this is a serial framing implementation for Arduino.
-
-nslc is *not* in any way shape or form compatible with HDLC.
-
+this is a serial framing implementation for Arduino. nslc is *not* in any way shape or form compatible with HDLC.
 Frames consists of a series of data bytes followed by a checksum byte, followed by a LF (0x0A).
 
 Before transmission, control characters appearing in the data and checksum bytes must be escaped: 
@@ -13,14 +9,12 @@ Before transmission, control characters appearing in the data and checksum bytes
   LF characters appearing in the frame are replaced with the two-byte sequence TAB+LF (0x09, 0x0A).
 The final LF character is *not* escaped.
 
-On reception, TAB+LF sequences are replaced with LF, and TAB+SPACE sequences with TAB.
-
-This yields a checksummed protocol that does a reasonable job at preserving strings, producing only a possible garbage character
+On reception, TAB+LF sequences are replaced with LF, and TAB+SPACE sequences with TAB. This yields a checksummed protocol that does a reasonable job at preserving strings, producing only a possible garbage character
 at the end of each line.
 
 The checksum used is an 8-bit [Pearson Hash](https://en.wikipedia.org/wiki/Pearson_hashing) with the following table T:
 ```c++
-(uint_8) T[] = {13,161,243,130,182,147,68,235,82,83,221,191,112,38,135,184,143,206
+uint_8 T[] = {13,161,243,130,182,147,68,235,82,83,221,191,112,38,135,184,143,206
 ,240,116,253,131,106,220,231,250,120,75,223,79,196,16,69,230,140,101
 ,150,98,245,104,111,20,236,216,192,76,6,185,64,144,12,96,94,165
 ,152,190,99,203,63,66,226,232,164,224,193,145,119,160,159,51,17,108
@@ -42,5 +36,3 @@ With this choice of T, the strings
 `"help\r\n"` checksum correctly ( "p" is the checksum byte for "hel" and "\r" is the checksum byte for "help").
 If devices implement a handler for these sequences, then even someone with a misconfigured terminal
 will be able to type "help", press return and see help on how to use the device.
-
-
