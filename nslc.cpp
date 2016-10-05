@@ -50,10 +50,12 @@ void NSLC::sendchar(uint8_t data)
 void NSLC::charReceiver(uint8_t data)
 {
 
-    if(data == FRAME_BOUNDARY_OCTET) {
-      for(int i=0; i< this->frame_position-1; i++) {
-        this->frame_checksum = T[this->frame_checksum ^ this->receive_frame_buffer[i]];
-      }
+    if(data == FRAME_BOUNDARY_OCTET &&
+         (this->frame_position >=2) && 
+         !this->escape_character ) {
+        for(int i=0; i< this->frame_position-1; i++) {
+          this->frame_checksum = T[this->frame_checksum ^ this->receive_frame_buffer[i]];
+        }
 
         if ((this->frame_position >=2) &&
             (this->frame_checksum == this->receive_frame_buffer[this->frame_position-1])) {
